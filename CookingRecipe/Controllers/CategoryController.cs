@@ -8,9 +8,9 @@ namespace CookingRecipe.Controllers;
 [Route("api/[controller]")]
 public class CategoryController : ControllerBase
 {
-    private readonly DbContext _context;
+    private readonly CookingrecipeContext _context;
 
-    public CategoryController(DbContext context)
+    public CategoryController(CookingrecipeContext context)
     {
         _context = context;
     }
