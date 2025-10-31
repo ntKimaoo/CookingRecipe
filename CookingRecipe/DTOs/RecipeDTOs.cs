@@ -64,6 +64,7 @@ namespace CookingRecipe.DTOs
             public int RecipeId { get; set; }
             public string Title { get; set; } = null!;
             public string? Description { get; set; }
+            public string? Thumbnail { get; set; }
             public string Instructions { get; set; } = null!;
             public int? PrepTime { get; set; }
             public int? CookTime { get; set; }
@@ -84,6 +85,7 @@ namespace CookingRecipe.DTOs
             public int RecipeId { get; set; }
             public string Title { get; set; } = null!;
             public string? Description { get; set; }
+            public string? Thumbnail { get; set; }
             public int? TotalTime { get; set; }
             public string? Difficulty { get; set; }
             public string AuthorName { get; set; } = null!;
