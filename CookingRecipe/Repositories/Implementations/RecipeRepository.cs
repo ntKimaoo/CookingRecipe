@@ -19,6 +19,19 @@ public class RecipeRepository : IRecipeRepository
             .Include(r => r.RecipeIngredients).ThenInclude(ri => ri.Ingredient)
             .Include(r => r.Recipesteps)
             .Include(r => r.Favorites)
+            .OrderByDescending(r => r.CreatedAt)
+            .ToListAsync();
+    }
+    public async Task<IEnumerable<Recipe>> GetRecommendRecipeAsync()
+    {
+        return await _context.Recipes
+            .Include(r => r.Author)
+            .Include(r => r.RecipeCategories).ThenInclude(rc => rc.Category)
+            .Include(r => r.RecipeIngredients).ThenInclude(ri => ri.Ingredient)
+            .Include(r => r.Recipesteps)
+            .Include(r => r.Favorites)
+            .OrderByDescending(r => r.Favorites.Count)
+            .Take(10)
             .ToListAsync();
     }
 

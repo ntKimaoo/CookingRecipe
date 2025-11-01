@@ -32,7 +32,13 @@ public class RecipeController : ControllerBase
         var recipes = await _recipeService.GetAllRecipesAsync();
         return Ok(recipes);
     }
-
+    [HttpGet("recommend")]
+    public async Task<ActionResult<IEnumerable<RecipeListDto>>> GetListRecipeRecommend()
+    {
+        var recipes = await _recipeService.GetRecommendRecipeAsync();
+        return Ok(recipes);
+    }
+    
     /// <summary>
     /// Gets a recipe by its ID.
     /// </summary>

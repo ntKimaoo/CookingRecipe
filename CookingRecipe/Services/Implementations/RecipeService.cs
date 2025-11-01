@@ -22,6 +22,11 @@ namespace CookingRecipe.Services.Implementations
             var recipes = await _recipeRepository.GetAllAsync();
             return _mapper.Map<IEnumerable<RecipeListDto>>(recipes);
         }
+        public async Task<IEnumerable<RecipeListDto>> GetRecommendRecipeAsync()
+        {
+            var recipes = await _recipeRepository.GetRecommendRecipeAsync();
+            return _mapper.Map<IEnumerable<RecipeListDto>>(recipes);
+        }
 
         public async Task<RecipeDto?> GetRecipeByIdAsync(int id)
         {

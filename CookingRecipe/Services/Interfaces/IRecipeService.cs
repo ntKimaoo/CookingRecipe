@@ -6,6 +6,7 @@ namespace CookingRecipe.Services.Interfaces;
 public interface IRecipeService
 {
     Task<IEnumerable<RecipeListDto>> GetAllRecipesAsync();
+    Task<IEnumerable<RecipeListDto>> GetRecommendRecipeAsync();
     Task<RecipeDto?> GetRecipeByIdAsync(int id);
     Task<IEnumerable<RecipeListDto>> GetRecipesByAuthorAsync(int authorId);
     Task<RecipeDto> CreateRecipeAsync(CreateRecipeDto dto);
