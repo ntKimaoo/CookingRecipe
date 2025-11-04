@@ -86,10 +86,9 @@ namespace CookingRecipe.Controllers
         public async Task<ActionResult<UserResponseDto>> Login([FromBody] UserLoginDto dto)
         {
             var user = await _userService.LoginAsync(dto);
-            var token = GenerateJwtToken(user.Username, user.RoleName);
             if (user == null)
                 return Unauthorized(new { message = "Invalid username or password" });
-
+            var token = GenerateJwtToken(user.Username, user.RoleName);
             return Ok(token);
         }
 

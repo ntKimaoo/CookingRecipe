@@ -14,7 +14,7 @@ public partial class CookingrecipeContext : DbContext
     public CookingrecipeContext(DbContextOptions<CookingrecipeContext> options)
         : base(options)
     {
-    }
+    }   
     public virtual DbSet<Role> Roles { get; set; }
     public virtual DbSet<Category> Categories { get; set; }
 
@@ -42,7 +42,7 @@ public partial class CookingrecipeContext : DbContext
         modelBuilder
             .UseCollation("utf8mb4_0900_ai_ci")
             .HasCharSet("utf8mb4");
-
+        modelBuilder.Entity<Role>().ToTable("roles");
         modelBuilder.Entity<Category>(entity =>
         {
             entity.HasKey(e => e.CategoryId).HasName("PRIMARY");
