@@ -124,15 +124,12 @@ public class RecipeController : ControllerBase
     [HttpPut("{id}")]
     public async Task<ActionResult<RecipeDto>> Update(int id, [FromBody] UpdateRecipeDto dto)
     {
-        if (id != dto.RecipeId)
-            return BadRequest(new { message = "ID mismatch" });
-
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
         try
         {
-            var updated = await _recipeService.UpdateRecipeAsync(dto);
+            var updated = await _recipeService.UpdateRecipeAsync(id,dto);
             return Ok(updated);
         }
         catch (KeyNotFoundException ex)

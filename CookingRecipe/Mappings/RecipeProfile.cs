@@ -9,7 +9,6 @@ namespace CookingRecipe.Mappings
     {
         public RecipeProfile()
         {
-            // Recipe mappings
             CreateMap<Recipe, RecipeDto>()
                 .ForMember(dest => dest.Author, opt => opt.MapFrom(src => src.Author))
                 .ForMember(dest => dest.Ingredients, opt => opt.MapFrom(src => src.RecipeIngredients))
@@ -31,16 +30,17 @@ namespace CookingRecipe.Mappings
                 .ForMember(dest => dest.RecipeIngredients, opt => opt.Ignore())
                 .ForMember(dest => dest.Recipesteps, opt => opt.Ignore());
 
-            CreateMap<UpdateRecipeDto, Recipe>()
-                .ForMember(dest => dest.AuthorId, opt => opt.Ignore())
-                .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
-                .ForMember(dest => dest.Author, opt => opt.Ignore())
-                .ForMember(dest => dest.Favorites, opt => opt.Ignore())
-                .ForMember(dest => dest.RecipeCategories, opt => opt.Ignore())
-                .ForMember(dest => dest.RecipeIngredients, opt => opt.Ignore())
-                .ForMember(dest => dest.Recipesteps, opt => opt.Ignore());
+            CreateMap<RecipeDTOs.UpdateRecipeDto, Recipe>()
+            .ForMember(dest => dest.AuthorId, opt => opt.Ignore())
+            .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
+            .ForMember(dest => dest.Author, opt => opt.Ignore())
+            .ForMember(dest => dest.Favorites, opt => opt.Ignore())
+            .ForMember(dest => dest.RecipeCategories, opt => opt.Ignore())
+            .ForMember(dest => dest.RecipeIngredients, opt => opt.Ignore())
+            .ForMember(dest => dest.Recipesteps, opt => opt.Ignore())
+            // 👉 Chỉ map khi giá trị không null
+            .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
 
-            // Related entities
             CreateMap<User, AuthorDto>();
             CreateMap<RecipeIngredient, RecipeIngredientDto>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Ingredient.Name))

@@ -43,21 +43,81 @@ namespace CookingRecipe.Services.Implementations
         public async Task<RecipeDto> CreateRecipeAsync(CreateRecipeDto dto)
         {
             var recipe = _mapper.Map<Recipe>(dto);
+            if (dto.Ingredients != null && dto.Ingredients.Any())
+            {
+                recipe.RecipeIngredients = dto.Ingredients.Select(i => new RecipeIngredient
+                {
+                    IngredientId = i.IngredientId,
+                    Quantity = i.Quantity
+                }).ToList();
+            }
+            if (dto.Steps != null && dto.Steps.Any())
+            {
+                recipe.Recipesteps = dto.Steps.Select(s => new Recipestep
+                {
+                    StepNumber = s.StepNumber,
+                    Content = s.Content,
+                    ImageUrl = s.ImageUrl,
+                    VideoUrl = s.VideoUrl,
+                    Duration = s.Duration
+                }).ToList();
+            }
+
+            if (dto.CategoryIds != null && dto.CategoryIds.Any())
+            {
+                recipe.RecipeCategories = dto.CategoryIds.Select(cid => new RecipeCategory
+                {
+                    CategoryId = cid
+                }).ToList();
+            }
             var created = await _recipeRepository.CreateAsync(recipe);
             var result = await _recipeRepository.GetByIdAsync(created.RecipeId);
             return _mapper.Map<RecipeDto>(result!);
         }
 
-        public async Task<RecipeDto> UpdateRecipeAsync(UpdateRecipeDto dto)
+        public async Task<RecipeDto> UpdateRecipeAsync(int id,UpdateRecipeDto dto)
         {
-            var exists = await _recipeRepository.ExistsAsync(dto.RecipeId);
-            if (!exists)
-                throw new KeyNotFoundException($"Recipe with ID {dto.RecipeId} not found");
+            var recipe = await _recipeRepository.GetByIdAsync(id);
+            if (recipe==null)
+                throw new KeyNotFoundException($"Recipe with ID {id} not found");
+            _mapper.Map(dto, recipe);
+            if (dto.Ingredients != null)
+            {
+                recipe.RecipeIngredients.Clear();
+                recipe.RecipeIngredients = dto.Ingredients.Select(i => new RecipeIngredient
+                {
+                    IngredientId = i.IngredientId,
+                    Quantity = i.Quantity
+                }).ToList();
+            }
 
-            var recipe = _mapper.Map<Recipe>(dto);
+            // Cập nhật Steps
+            if (dto.Steps != null)
+            {
+                recipe.Recipesteps.Clear();
+                recipe.Recipesteps = dto.Steps.Select(s => new Recipestep
+                {
+                    StepNumber = s.StepNumber,
+                    Content = s.Content,
+                    ImageUrl = s.ImageUrl,
+                    VideoUrl = s.VideoUrl,
+                    Duration = s.Duration
+                }).ToList();
+            }
+
+            // Cập nhật Categories
+            if (dto.CategoryIds != null)
+            {
+                recipe.RecipeCategories.Clear();
+                recipe.RecipeCategories = dto.CategoryIds.Select(cid => new RecipeCategory
+                {
+                    CategoryId = cid
+                }).ToList();
+            }
+
             await _recipeRepository.UpdateAsync(recipe);
-            var updated = await _recipeRepository.GetByIdAsync(dto.RecipeId);
-            return _mapper.Map<RecipeDto>(updated!);
+
+            return _mapper.Map<RecipeDto>(recipe);
         }
 
         public async Task<bool> DeleteRecipeAsync(int id)
