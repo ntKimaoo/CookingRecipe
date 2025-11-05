@@ -2,6 +2,7 @@
 using CookingRecipe.Repositories;
 using CookingRecipe.Repositories.Implementations;
 using CookingRecipe.Repositories.Interfaces;
+using CookingRecipe.Services;
 using CookingRecipe.Services.Implementations;
 using CookingRecipe.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -60,6 +61,8 @@ builder.Services.AddScoped<IIngredientRepository, IngredientRepository>();
 builder.Services.AddScoped<IIngredientService, IngredientService>();
 builder.Services.AddScoped<IRecipeRepository, RecipeRepository>();
 builder.Services.AddScoped<IRecipeService, RecipeService>();
+builder.Services.AddScoped<IFavoriteRepository, FavoriteRepository>();
+builder.Services.AddScoped<IFavoriteService, FavoriteService>();
 //JWT Authentication
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var key = Encoding.UTF8.GetBytes(jwtSettings["SecretKey"]) ?? throw new InvalidOperationException("JWT SecretKey not configured");
