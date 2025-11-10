@@ -29,7 +29,28 @@ namespace CookingRecipe.Controllers
             _userService = userService;
             _config = config;
         }
+        [HttpGet("me")]
+        [Authorize] // bắt buộc token JWT
+        public async Task<IActionResult> GetMe()
+        {
+            var username = User.Identity?.Name;
+            if (username == null)
+                return Unauthorized(new { message = "Invalid or missing token." });
 
+            var user = await _userService.GetCurrentUserAsync(username);
+            if (user == null)
+                return NotFound(new { message = "User not found." });
+
+            return Ok(new
+            {
+                user.UserId,
+                user.Username,
+                user.Email,
+                user.FullName,
+                user.CreatedAt,
+                Role = user.Role?.RoleName
+            });
+        }
         /// <summary>
         /// Gets all users. Admin only.
         /// </summary>

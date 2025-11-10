@@ -23,13 +23,16 @@ namespace CookingRecipe.Services.Implementations
             var user = await _userRepository.GetByIdAsync(userId);
             return user == null ? null : MapToDto(user);
         }
-
+        
         public async Task<IEnumerable<UserResponseDto>> GetAllAsync()
         {
             var users = await _userRepository.GetAllAsync();
             return users.Select(MapToDto);
         }
-
+        public async Task<User?> GetCurrentUserAsync(string username)
+        {
+            return await _userRepository.GetByUsernameAsync(username);
+        }
         public async Task<UserResponseDto> RegisterAsync(UserRegisterDto dto)
         {
             // Kiểm tra username đã tồn tại

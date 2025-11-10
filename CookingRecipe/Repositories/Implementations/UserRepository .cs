@@ -32,6 +32,7 @@ namespace CookingRecipe.Repositories.Implementations
         public async Task<User?> GetByEmailAsync(string email)
         {
             return await _context.Users
+                .Include(u => u.Role)
                 .FirstOrDefaultAsync(u => u.Email == email);
         }
 

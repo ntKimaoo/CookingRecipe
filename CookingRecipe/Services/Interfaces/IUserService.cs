@@ -1,9 +1,11 @@
 ﻿using CookingRecipe.DTOs;
+using CookingRecipe.Models;
 
 namespace CookingRecipe.Services.Interfaces
 {
     public interface IUserService
     {
+        Task<User?> GetCurrentUserAsync(string username);
         Task<UserResponseDto?> GetByIdAsync(int userId);
         Task<IEnumerable<UserResponseDto>> GetAllAsync();
         Task<UserResponseDto> RegisterAsync(UserRegisterDto dto);
