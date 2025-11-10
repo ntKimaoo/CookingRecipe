@@ -2,6 +2,7 @@
 using CookingRecipe.Repositories;
 using CookingRecipe.Repositories.Implementations;
 using CookingRecipe.Repositories.Interfaces;
+using CookingRecipe.Services;
 using CookingRecipe.Services.Implementations;
 using CookingRecipe.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -60,6 +61,19 @@ builder.Services.AddScoped<IIngredientRepository, IngredientRepository>();
 builder.Services.AddScoped<IIngredientService, IngredientService>();
 builder.Services.AddScoped<IRecipeRepository, RecipeRepository>();
 builder.Services.AddScoped<IRecipeService, RecipeService>();
+builder.Services.AddScoped<IFavoriteRepository, FavoriteRepository>();
+builder.Services.AddScoped<IFavoriteService, FavoriteService>();
+builder.Services.AddScoped<AIService>();
+builder.Services.AddHttpClient();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()    // Cho phép mọi origin (hoặc chỉ định origin cụ thể)
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
 //JWT Authentication
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var key = Encoding.UTF8.GetBytes(jwtSettings["SecretKey"]) ?? throw new InvalidOperationException("JWT SecretKey not configured");
@@ -95,12 +109,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseRouting();
 app.UseSwagger();
 app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
-
+app.UseCors("AllowAll");
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

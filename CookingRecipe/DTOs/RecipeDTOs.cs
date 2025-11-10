@@ -24,8 +24,9 @@ namespace CookingRecipe.DTOs
 
             [RegularExpression("^(Easy|Medium|Hard)$", ErrorMessage = "Difficulty must be Easy, Medium, or Hard")]
             public string? Difficulty { get; set; }
-
+            
             public int AuthorId { get; set; }
+            public string? Thumbnail { get; set; }
 
             public List<CreateRecipeIngredientDto>? Ingredients { get; set; }
             public List<CreateRecipeStepDto>? Steps { get; set; }
@@ -35,27 +36,26 @@ namespace CookingRecipe.DTOs
         // DTO cho việc cập nhật Recipe
         public class UpdateRecipeDto
         {
-            [Required]
-            public int RecipeId { get; set; }
-
-            [Required]
             [StringLength(200)]
-            public string Title { get; set; } = null!;
+            public string? Title { get; set; }
 
             [StringLength(1000)]
             public string? Description { get; set; }
 
-            [Required]
-            public string Instructions { get; set; } = null!;
+            public string? Instructions { get; set; }
 
             [Range(0, 1440)]
             public int? PrepTime { get; set; }
 
             [Range(0, 1440)]
             public int? CookTime { get; set; }
+            public string? Thumbnail { get; set; }
 
-            [RegularExpression("^(Easy|Medium|Hard)$")]
+            [RegularExpression("^(easy|medium|hard)$")]
             public string? Difficulty { get; set; }
+            public List<CreateRecipeIngredientDto>? Ingredients { get; set; }
+            public List<CreateRecipeStepDto>? Steps { get; set; }
+            public List<int>? CategoryIds { get; set; }
         }
 
         // DTO cho việc đọc Recipe (response)
