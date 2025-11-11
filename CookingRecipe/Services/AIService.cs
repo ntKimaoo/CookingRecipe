@@ -59,13 +59,13 @@ Trả lời bằng tiếng Việt, ngắn gọn, dễ hiểu, không quá chuyê
             List<Recipe> allRecipes)
         {
             var current = currentRecipes.Any()
-                ? string.Join("\n", currentRecipes.Select(r => $"- {r.Title} (ID: {r.RecipeId})"))
+                ? string.Join("\n", currentRecipes.Select(r => $"- {r.Title}"))
                 : "Chưa có món nào được chọn";
 
             var available = string.Join("\n", allRecipes
                 .Where(r => !currentRecipes.Any(c => c.RecipeId == r.RecipeId))
                 .Take(20)
-                .Select(r => $"- {r.Title} (ID: {r.RecipeId}) - {r.Difficulty} - {r.Description}"));
+                .Select(r => $"- {r.Title} - {r.Difficulty} - {r.Description}"));
 
             var prompt = $@"
 Bạn là chuyên gia gợi ý món ăn.
@@ -82,7 +82,7 @@ Hãy đề xuất 3-5 món phù hợp nhất, mỗi món phải có:
 - ID (số trong ngoặc)
 - Lý do chọn (ngắn gọn)
 
-Format: ""- [Tên món] (ID: XX) - [Lý do]""
+Format: ""- [Tên món] - [Lý do]""
 Trả lời bằng tiếng Việt.";
 
             var response = await SendPromptToGemini(prompt);
@@ -211,7 +211,7 @@ Trả lời bằng tiếng Việt ngắn gọn, linh hoạt.";
         public async Task<string> CreateMealPlanAsync(string userMessage, List<Recipe> allRecipes)
         {
             var available = string.Join("\n", allRecipes.Take(30).Select(r =>
-                $"- {r.Title} (ID: {r.RecipeId}) - {r.Difficulty}"));
+                $"- {r.Title} - {r.Difficulty}"));
 
             var prompt = $@"
 Bạn là chuyên gia dinh dưỡng và lập thực đơn.
@@ -226,7 +226,7 @@ Hãy tạo thực đơn:
 3. Đa dạng món ăn
 4. Kèm ID món để dễ tra cứu
 
-Format: ""**[Bữa]**: [Tên món] (ID: XX) - [Lý do]""
+Format: ""**[Bữa]**: [Tên món] - [Lý do]""
 Trả lời bằng tiếng Việt ngắng gọn.";
 
             return await SendPromptToGemini(prompt);
@@ -238,7 +238,7 @@ Trả lời bằng tiếng Việt ngắng gọn.";
                 return "Không có món nào được chọn";
 
             return string.Join("\n", recipes.Select(r =>
-                $"- {r.Title} (ID: {r.RecipeId}, {r.Difficulty ?? "Không rõ"}): " +
+                $"- {r.Title} ({r.Difficulty ?? "Không rõ"}): " +
                 $"Chuẩn bị {r.PrepTime ?? 0}p, nấu {r.CookTime ?? 0}p. " +
                 $"{r.Description ?? "Không có mô tả"}"));
         }
